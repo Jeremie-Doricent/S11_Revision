@@ -40,6 +40,8 @@ namespace PresseMots.Models
 
         public virtual IList<Comment> Comments { get; set; }
 
+        public virtual StoryTag StoryTag { get; set; }
+
 
     }
 }
