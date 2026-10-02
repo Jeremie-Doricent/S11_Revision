@@ -23,7 +23,7 @@ namespace PresseMots.Controllers
                      
             var presseMotsDbContext = _context.Stories.Where(x=> Id == null || x.Id == Id);
 
-            return View( presseMotsDbContext.ToList());
+            return View( presseMotsDbContext);
         }
 
         public IActionResult SearchByTag(string tagName) {

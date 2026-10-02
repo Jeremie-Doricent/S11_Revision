@@ -19,12 +19,14 @@ namespace PresseMots.Controllers
         // GET: Tags
         public async Task<IActionResult> Index()
         {
-              return View(/*...*/);
+              return View(_context.tags);
         }
 
         // GET: Tags/Create
         public IActionResult Create()
         {
+            Tag tag = new Tag();
+           
             return View();
         }
 
@@ -33,11 +35,14 @@ namespace PresseMots.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Object model, [Bind("Id,Name")] Tag tag)
+        public async Task<IActionResult> Create( Tag tag)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(tag);
+                _context.SaveChanges();
+                TempData["Success"] = $"Zombie {tag.Name} added";
+                return this.RedirectToAction("Index"); ;
                 /*?*/
             }
             return View(_context.Add(tag));
@@ -47,12 +52,13 @@ namespace PresseMots.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             /*..?*/
-            if (ModelState.IsValid)
+            Tag? tag = _context.tags.Find(id);
+            if (tag == null)
             {
-                _context.Remove(id);
-                /*?*/
+                return NotFound();
             }
-            return View(_context.Remove(id));
+
+            return View(tag);
         }
 
         // POST: Tags/Delete/5
@@ -61,7 +67,16 @@ namespace PresseMots.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             /*...*/
+            Tag? tag = _context.tags.Find(id);
+            if (tag == null)
+            {
+                return NotFound();
+            }
 
+            _context.tags.Remove(tag);
+            _context.SaveChanges();
+            TempData["Success"] = $"ZombieType {tag.Name} has been removed";
+            return RedirectToAction("Index");
             return RedirectToAction(nameof(Index));
         }
     }
